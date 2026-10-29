@@ -7,12 +7,14 @@ import { MatInputModule } from '@angular/material/input';
 import { email } from '@angular/forms/signals';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { map, Observable, startWith } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   imports: [MatStepperModule, ReactiveFormsModule, MatButtonModule,
     MatFormFieldModule, MatInputModule, MatFormFieldModule,  MatFormFieldModule,
-    MatInputModule, MatIconModule, MatSelectModule
+    MatInputModule, MatIconModule, MatSelectModule, MatAutocompleteModule, AsyncPipe
   ],
   selector: 'app-job-application-component',
   styleUrl: './job-application-component.css',
@@ -35,7 +37,7 @@ export class JobApplicationComponent {
   });
 
   jobPreferencesForm: FormGroup = this.fb.group({
-    position: ['', Validators.required]
+    preferredLocation: ['', Validators.required]
   });
 
   reviewForm: FormGroup = this.fb.group({
@@ -77,5 +79,42 @@ export class JobApplicationComponent {
       skills: ['MySQL', 'PostgresSQL', 'MongoDB', 'Redis', 'SQL Server']
     }
   ];
+
+  cities: string[] = [
+    'Bangalore',
+    'Hyderabad',
+    'Mumbai',
+    'Delhi',
+    'chennai',
+    'pune',
+    'kolkata',
+    'Ahmedabad',
+    'Jaipur',
+    'Lucknow',
+    'New York',
+    'San Franciso',
+    'London',
+    'Dubai',
+    'Toronto'
+  ];
+
+  filteredCities!: Observable<string[]>;
+
+  ngOnInit(): void
+  {
+    this.filteredCities = this.jobPreferencesForm.get('preferredLocation')!
+    .valueChanges.pipe(
+      startWith(''),
+      map(value => this.filtereCities(value || ''))
+    );
+  }
+
+  private filtereCities(value: string): string[]
+  {
+    const filterValue = value.toLocaleLowerCase();
+    return this.cities.filter(city => 
+      city.toLowerCase().includes(filterValue)
+    )
+  }
 
 }

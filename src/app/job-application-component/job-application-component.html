@@ -65,7 +65,7 @@
         </div>
     </mat-step>
 
-    <mat-step label="professional Details" [stepControl]="professionalDetailsForm">
+    <mat-step label="Professional Details" [stepControl]="professionalDetailsForm">
         <form [formGroup]="professionalDetailsForm" class="secandStpers">
             <mat-form-field class="form-field">
                 <mat-label>Current Role</mat-label>
@@ -108,17 +108,32 @@
             <button matButton matStepperNext>Next</button>
         </div>
     </mat-step>
-    <mat-step label="Professional Details" [stepControl]="professionalDetailsForm">
+    <!-- <mat-step label="Professional Details" [stepControl]="professionalDetailsForm">
         <p>Perfessional details form fields will go here.</p>
 
         <div class="step-actions">
             <button matButton matStepperPrevious>Back</button>
             <button matButton matStepperNext>Next</button>
         </div>
-    </mat-step>
+    </mat-step> -->
      <mat-step label="Job Perfessional" [stepControl]="jobPreferencesForm">
-        <p>Job Perfessional form fields will go here.</p>
+        <!-- <p>Job Perfessional form fields will go here.</p> -->
+        <form [formGroup]="jobPreferencesForm">
+            <mat-form-field class="form-field">
+                <mat-label>Preferred Location</mat-label>
+                <mat-icon matPrefix>location_on</mat-icon>
 
+                <input type="text" matInput [matAutocomplete]="auto" 
+                formControlName="preferredLocation"/>
+
+                <mat-autocomplete #auto>
+                    @for(city of filteredCities | async; track city)
+                    {
+                        <mat-option [value]="city">{{city}}</mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-form-field>
+        </form>
         <div class="step-actions">
             <button matButton matStepperPrevious>Back</button>
             <button matButton matStepperNext>Next</button>
