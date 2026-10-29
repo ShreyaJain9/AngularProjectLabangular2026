@@ -10,11 +10,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { MatDatepickerModule, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
   imports: [MatStepperModule, ReactiveFormsModule, MatButtonModule,
     MatFormFieldModule, MatInputModule, MatFormFieldModule,  MatFormFieldModule,
-    MatInputModule, MatIconModule, MatSelectModule, MatAutocompleteModule, AsyncPipe
+    MatInputModule, MatIconModule, MatSelectModule, MatAutocompleteModule, AsyncPipe, 
+    MatDatepickerModule,  MatDateRangePicker, MatDateRangeInput
   ],
   selector: 'app-job-application-component',
   styleUrl: './job-application-component.css',
@@ -37,12 +40,15 @@ export class JobApplicationComponent {
   });
 
   jobPreferencesForm: FormGroup = this.fb.group({
-    preferredLocation: ['', Validators.required]
+    preferredLocation: ['', Validators.required],
+    availableStartDate: [null, Validators.required]
   });
 
   reviewForm: FormGroup = this.fb.group({
     confirm: ['', Validators.required]
   });
+
+  today: Date = new Date();
 
   clearField(contrlName: string): void{
     this.personalInfoForm.get(contrlName)?.reset();
