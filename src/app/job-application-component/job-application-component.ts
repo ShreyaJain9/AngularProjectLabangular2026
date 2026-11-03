@@ -41,7 +41,11 @@ export class JobApplicationComponent {
 
   jobPreferencesForm: FormGroup = this.fb.group({
     preferredLocation: ['', Validators.required],
-    availableStartDate: [null, Validators.required]
+    availableStartDate: [null, Validators.required],
+    interviewAvailability: this.fb.group({
+      start: [null, Validators.required],
+      end: [null, Validators.required]
+    })
   });
 
   reviewForm: FormGroup = this.fb.group({

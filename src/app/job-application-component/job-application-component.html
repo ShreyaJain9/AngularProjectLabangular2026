@@ -1,213 +1,221 @@
+
 <mat-stepper orientation="horizontal" #stepper linear class="stepper">
+
+    <!-- Step 1: Personal Information -->
     <mat-step label="Personal Information" [stepControl]="personalInfoForm">
-        <p>Personal information form will go here.</p>
+
         <form [formGroup]="personalInfoForm">
+
             <mat-form-field class="form-field">
                 <mat-label>First Name</mat-label>
                 <mat-icon matPrefix>person</mat-icon>
-                <input matInput type="text" formControlName="firstName"
-                 name="firstName">
-                 @if(personalInfoForm.get('firstName')?.value){
-                     <button matIconButton matSuffix type="button"
-                     (click)="clearField('firstName')">
-                    <mat-icon>close</mat-icon>
-                    </button>
-                 }
-            </mat-form-field>
+                <input matInput type="text" formControlName="firstName">
 
-             <mat-form-field class="form-field">
-                <mat-label>Last Name</mat-label>
-                 <mat-icon matPrefix>person</mat-icon>
-                <input matInput type="text" formControlName="lastName"
-                 name="lastName">
-                   @if(personalInfoForm.get('lastName')?.value){
-                     <button matIconButton matSuffix type="button"
-                     (click)="clearField('lastName')">
-                    <mat-icon>close</mat-icon>
+                @if (personalInfoForm.get('firstName')?.value) {
+                    <button mat-icon-button matSuffix type="button"
+                        (click)="clearField('firstName')">
+                        <mat-icon>close</mat-icon>
                     </button>
-                 }
-            </mat-form-field>
-
-             <mat-form-field class="form-field">
-                <mat-label>Email</mat-label>
-                 <mat-icon matPrefix>mail</mat-icon>
-                <input matInput type="email" formControlName="email"
-                 name="email">
-                  @if(personalInfoForm.get('email')?.value){
-                     <button matIconButton matSuffix type="button"
-                     (click)="clearField('email')">
-                    <mat-icon>close</mat-icon>
-                    </button>
-                 }
-                 <!-- <button matIconButton matSuffix type="button"
-                 (click)="clearField('firstName')">
-                    <mat-icon>close</mat-icon>
-                </button> -->
+                }
             </mat-form-field>
 
             <mat-form-field class="form-field">
-                <mat-label>phone</mat-label>
-                 <mat-icon matPrefix>phone</mat-icon>
-                <input matInput type="number" formControlName="phone"
-                 name="phone" maxlength="10" #phoneInput>
-                @if(personalInfoForm.get('phone')?.value){
-                     <button matIconButton matSuffix type="button"
-                     (click)="clearField('phone')">
-                    <mat-icon>close</mat-icon>
+                <mat-label>Last Name</mat-label>
+                <mat-icon matPrefix>person</mat-icon>
+                <input matInput type="text" formControlName="lastName">
+
+                @if (personalInfoForm.get('lastName')?.value) {
+                    <button mat-icon-button matSuffix type="button"
+                        (click)="clearField('lastName')">
+                        <mat-icon>close</mat-icon>
                     </button>
-                 }
-                 <mat-hint>Enter 10-digit phone number</mat-hint>
-                 <mat-hint align="end">{{phoneInput.value.length}} / 10</mat-hint>
+                }
             </mat-form-field>
+
+            <mat-form-field class="form-field">
+                <mat-label>Email</mat-label>
+                <mat-icon matPrefix>mail</mat-icon>
+                <input matInput type="email" formControlName="email">
+
+                @if (personalInfoForm.get('email')?.value) {
+                    <button mat-icon-button matSuffix type="button"
+                        (click)="clearField('email')">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                }
+            </mat-form-field>
+
+            <mat-form-field class="form-field">
+                <mat-label>Phone</mat-label>
+                <mat-icon matPrefix>phone</mat-icon>
+                <input matInput type="tel" formControlName="phone"
+                    maxlength="10" #phoneInput>
+
+                @if (personalInfoForm.get('phone')?.value) {
+                    <button mat-icon-button matSuffix type="button"
+                        (click)="clearField('phone')">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                }
+
+                <mat-hint>Enter 10-digit phone number</mat-hint>
+                <mat-hint align="end">
+                    {{ phoneInput.value.length }} / 10
+                </mat-hint>
+            </mat-form-field>
+
         </form>
+
         <div class="step-actions">
-            <button matButton matStepperNext>Next</button>
+            <button mat-button matStepperNext>Next</button>
         </div>
+
     </mat-step>
 
+
+    <!-- Step 2: Professional Details -->
     <mat-step label="Professional Details" [stepControl]="professionalDetailsForm">
-        <form [formGroup]="professionalDetailsForm" class="secandStpers">
+
+        <form [formGroup]="professionalDetailsForm" class="secondSteppers">
+
             <mat-form-field class="form-field">
                 <mat-label>Current Role</mat-label>
                 <mat-icon matPrefix>work</mat-icon>
+
                 <mat-select formControlName="currentRole">
-                    @for (role of roles; track role)
-                    {
-                        <mat-option [value]="role">{{role}}</mat-option>
+                    @for (role of roles; track role) {
+                        <mat-option [value]="role">{{ role }}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>
-              <mat-form-field class="form-field">
-                    <mat-label>Years of Experience</mat-label>
-                    <mat-icon matPrefix>schedule</mat-icon>
-                    <mat-select formControlName="experience">
-                        @for (level of experienceLevels; track level)
-                        {
-                            <mat-option [value]="level">{{level}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
 
-                 <mat-form-field class="form-field">
-                    <mat-label>Technical Skills</mat-label>
-                    <mat-icon matPrefix>code</mat-icon>
-                    <mat-select formControlName="skills" multiple>
-                        @for (group of skillsGroups; track group.category)
-                        {
-                            <mat-optgroup [label]="group.category">
-                                @for (skill of group.skills; track skill){
-                                    <mat-option [value]="skill">{{skill}}</mat-option>
-                                }
-                            </mat-optgroup>
-                        }
-                    </mat-select>
-                </mat-form-field>
+            <mat-form-field class="form-field">
+                <mat-label>Years of Experience</mat-label>
+                <mat-icon matPrefix>schedule</mat-icon>
+
+                <mat-select formControlName="experience">
+                    @for (level of experienceLevels; track level) {
+                        <mat-option [value]="level">{{ level }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="form-field">
+                <mat-label>Technical Skills</mat-label>
+                <mat-icon matPrefix>code</mat-icon>
+
+                <mat-select formControlName="skills" multiple>
+                    @for (group of skillsGroups; track group.category) {
+                        <mat-optgroup [label]="group.category">
+                            @for (skill of group.skills; track skill) {
+                                <mat-option [value]="skill">
+                                    {{ skill }}
+                                </mat-option>
+                            }
+                        </mat-optgroup>
+                    }
+                </mat-select>
+            </mat-form-field>
+
         </form>
-         <div class="step-actions">
-            <button matButton matStepperPrevious>Back</button>
-            <button matButton matStepperNext>Next</button>
-        </div>
-    </mat-step>
-    <!-- <mat-step label="Professional Details" [stepControl]="professionalDetailsForm">
-        <p>Perfessional details form fields will go here.</p>
 
         <div class="step-actions">
-            <button matButton matStepperPrevious>Back</button>
-            <button matButton matStepperNext>Next</button>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
         </div>
-    </mat-step> -->
-  
-<mat-step label="Job Professional" [stepControl]="jobPreferencesForm">
 
-  <form [formGroup]="jobPreferencesForm">
+    </mat-step>
 
-    <!-- Preferred Location -->
-    <mat-form-field class="form-field">
-      <mat-label>Preferred Location</mat-label>
-      <mat-icon matPrefix>location_on</mat-icon>
 
-      <input
-        type="text"
-        matInput
-        formControlName="preferredLocation"
-        [matAutocomplete]="auto"
-      />
+    <!-- Step 3: Job Preferences -->
+    <mat-step label="Job Preferences" [stepControl]="jobPreferencesForm">
 
-      <mat-autocomplete #auto="matAutocomplete">
-        @for (city of filteredCities | async; track city) {
-          <mat-option [value]="city">{{ city }}</mat-option>
-        }
-      </mat-autocomplete>
-    </mat-form-field>
+        <form [formGroup]="jobPreferencesForm">
 
-    <!-- Available Start Date -->
-    <mat-form-field class="form-field">
-      <mat-label>Available Start Date</mat-label>
-      <mat-icon matPrefix>event</mat-icon>
+            <!-- Preferred Location -->
+            <mat-form-field class="form-field">
+                <mat-label>Preferred Location</mat-label>
+                <mat-icon matPrefix>location_on</mat-icon>
 
-      <input
-        matInput
-        formControlName="availableStartDate"
-        [matDatepicker]="picker"
-        [min]="today"
-      />
+                <input matInput type="text"
+                    formControlName="preferredLocation"
+                    [matAutocomplete]="auto">
 
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="picker">
-      </mat-datepicker-toggle>
+                <mat-autocomplete #auto="matAutocomplete">
+                    @for (city of filteredCities | async; track city) {
+                        <mat-option [value]="city">
+                            {{ city }}
+                        </mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-form-field>
 
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
 
-    <!-- Interview Availability -->
-    <mat-form-field class="form-field">
-      <mat-label>Interview Availability</mat-label>
-      <mat-icon matPrefix>date_range</mat-icon>
+            <!-- Available Start Date -->
+            <mat-form-field class="form-field">
+                <mat-label>Available Start Date</mat-label>
+                <mat-icon matPrefix>event</mat-icon>
 
-      <mat-date-range-input
-        formGroupName="interViewAvailabitye"
-        [rangePicker]="rangePicker"
-        [min]="today">
+                <input matInput
+                    formControlName="availableStartDate"
+                    [matDatepicker]="picker"
+                    [min]="today">
 
-        <input
-          matStartDate
-          formControlName="start"
-          placeholder="Start Date"
-        />
+                <mat-datepicker-toggle matSuffix [for]="picker">
+                </mat-datepicker-toggle>
 
-        <input
-          matEndDate
-          formControlName="end"
-          placeholder="End Date"
-        />
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
 
-      </mat-date-range-input>
 
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="rangePicker">
-      </mat-datepicker-toggle>
+            <!-- Interview Availability -->
+            <mat-form-field class="form-field">
+                <mat-label>Interview Availability</mat-label>
+                <mat-icon matPrefix>date_range</mat-icon>
 
-      <mat-date-range-picker #rangePicker></mat-date-range-picker>
-    </mat-form-field>
+                <mat-date-range-input
+                    formGroupName="interviewAvailability"
+                    [rangePicker]="rangePicker"
+                    [min]="today">
 
-  </form>
+                    <input matStartDate
+                        formControlName="start"
+                        placeholder="Start Date">
 
-  <!-- Step Actions -->
-  <div class="step-actions">
-    <button matButton matStepperPrevious>Back</button>
-    <button matButton matStepperNext>Next</button>
-  </div>
+                    <input matEndDate
+                        formControlName="end"
+                        placeholder="End Date">
 
-</mat-step>
+                </mat-date-range-input>
 
-     <mat-step label="Review"  [stepControl]="reviewForm">
-        <p>Reviiew your application before submitting.</p>
+                <mat-datepicker-toggle matSuffix [for]="rangePicker">
+                </mat-datepicker-toggle>
+
+                <mat-date-range-picker #rangePicker>
+                </mat-date-range-picker>
+
+            </mat-form-field>
+
+        </form>
 
         <div class="step-actions">
-            <button matButton matStepperPrevious>Back</button>
-            <button matButton="filled">Submit</button>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
         </div>
+
     </mat-step>
+
+
+    <!-- Step 4: Review -->
+    <mat-step label="Review" [stepControl]="reviewForm">
+
+        <p>Review your application before submitting.</p>
+
+        <div class="step-actions">
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-flat-button type="button">Submit</button>
+        </div>
+
+    </mat-step>
+
 </mat-stepper>
