@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { email } from '@angular/forms/signals';
+import { email, ValidationError } from '@angular/forms/signals';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -12,12 +12,31 @@ import { map, Observable, startWith } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { MatDatepickerModule, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Component({
-  imports: [MatStepperModule, ReactiveFormsModule, MatButtonModule,
-    MatFormFieldModule, MatInputModule, MatFormFieldModule,  MatFormFieldModule,
-    MatInputModule, MatIconModule, MatSelectModule, MatAutocompleteModule, AsyncPipe, 
-    MatDatepickerModule,  MatDateRangePicker, MatDateRangeInput
+  imports: [
+    MatStepperModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatSelectModule,
+    MatAutocompleteModule,
+    AsyncPipe,
+    MatDatepickerModule,
+    MatDateRangePicker,
+    MatDateRangeInput,
+    MatCheckboxModule,
+    MatSlideToggleModule,
+    MatRadioModule
   ],
   selector: 'app-job-application-component',
   styleUrl: './job-application-component.css',
@@ -45,7 +64,10 @@ export class JobApplicationComponent {
     interviewAvailability: this.fb.group({
       start: [null, Validators.required],
       end: [null, Validators.required]
-    })
+    }),
+    employeeTypes: [[], [Validators.required, JobApplicationComponent.minOneSelected]],
+    relocation: ['', Validators.required],
+    emailNotifications: [false],
   });
 
   reviewForm: FormGroup = this.fb.group({
@@ -53,8 +75,38 @@ export class JobApplicationComponent {
   });
 
   today: Date = new Date();
+  employmentTypes: string[] = ['Full-time', 'Part-time', 'Contract', 'Internship'];
+  relocationOptions: any = [
+    { value: 'anywhere', label: 'Yes, anywhere in the world'},
+    { value: 'india', label: 'Yes, within India' },
+    { value: 'no', label: 'No, prefer my current location' }
+  ]
 
-  clearField(contrlName: string): void{
+  private static minOneSelected(control: AbstractControl):
+  ValidationErrors | null {
+    const value = control.value;
+
+    return Array.isArray(value) && value.length > 0 ? null : {
+      minOneSelected: true
+    };
+  }
+
+  onEmploymentTypeChange(type: string, checked: boolean): void
+  {
+    const control: AbstractControl = this.jobPreferencesForm.get
+    ('employmentTypes')!;
+    const current: string[] = control.value || [];
+
+    if(checked){
+      control.setValue([...current, type]);
+    }
+    else{
+      control.setValue(current.filter(t => t != type));
+    }
+  }
+    
+
+  clearField(contrlName: string): void {
     this.personalInfoForm.get(contrlName)?.reset();
   }
 
@@ -68,7 +120,7 @@ export class JobApplicationComponent {
   ];
 
   experienceLevels: string[] = [
-    'Less than 1 years',
+    'Less than 1 year',
     '1 to 3 years',
     '2 to 5 years',
     '5 to 10 years',
@@ -81,12 +133,12 @@ export class JobApplicationComponent {
       skills: ['JavaScript', 'TypeScript', 'Angular', 'React', 'Vue', 'HTML', 'CSS']
     },
     {
-      category: 'Backeend',
-      skills: ['Node.js', 'Java', 'Python', '.NET', 'GO', 'PHP']
+      category: 'Backend',
+      skills: ['Node.js', 'Java', 'Python', '.NET', 'Go', 'PHP']
     },
     {
       category: 'Database',
-      skills: ['MySQL', 'PostgresSQL', 'MongoDB', 'Redis', 'SQL Server']
+      skills: ['MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'SQL Server']
     }
   ];
 
@@ -95,14 +147,14 @@ export class JobApplicationComponent {
     'Hyderabad',
     'Mumbai',
     'Delhi',
-    'chennai',
-    'pune',
-    'kolkata',
+    'Chennai',
+    'Pune',
+    'Kolkata',
     'Ahmedabad',
     'Jaipur',
     'Lucknow',
     'New York',
-    'San Franciso',
+    'San Francisco',
     'London',
     'Dubai',
     'Toronto'
@@ -110,21 +162,19 @@ export class JobApplicationComponent {
 
   filteredCities!: Observable<string[]>;
 
-  ngOnInit(): void
-  {
+  ngOnInit(): void {
     this.filteredCities = this.jobPreferencesForm.get('preferredLocation')!
-    .valueChanges.pipe(
-      startWith(''),
-      map(value => this.filtereCities(value || ''))
+      .valueChanges.pipe(
+        startWith(''),
+        map(value => this.filtereCities(value || ''))
+      );
+  }
+
+  private filtereCities(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.cities.filter(city =>
+      city.toLowerCase().includes(filterValue)
     );
   }
-
-  private filtereCities(value: string): string[]
-  {
-    const filterValue = value.toLocaleLowerCase();
-    return this.cities.filter(city => 
-      city.toLowerCase().includes(filterValue)
-    )
-  }
-
 }

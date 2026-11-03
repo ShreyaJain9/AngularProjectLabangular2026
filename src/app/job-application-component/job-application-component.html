@@ -196,6 +196,36 @@
 
             </mat-form-field>
 
+            <div class="field-section">
+                <label class="section-label">Employment Types</label>
+                <div class="options-group">
+                    @for (type of employmentTypes; track type)
+                    {
+                      <mat-checkbox [checked]="jobPreferencesForm.get('employmentTypes')?.value?.includes(type)"
+                      (change)="onEmploymentTypeChange(type, $event.checked)">
+                        {{type}}
+                    </mat-checkbox>   
+                    }
+                </div>
+            </div>
+
+            <div class="field-section">
+                <label class="section-label">Willing to Relocate</label>
+                <mat-radio-group formControlName="relocation" class="options-group">
+                    @for (option of relocationOptions; track option.value)
+                    {
+                        <mat-radio-button [value]="option.value">
+                            {{option.label}}
+                        </mat-radio-button>
+                    }
+                </mat-radio-group>
+            </div>
+
+            <div class="field-section">
+                <mat-slide-toggle formControlName="emailNotifications">
+                    Send me email notifications about new job openings
+                </mat-slide-toggle>
+            </div>
         </form>
 
         <div class="step-actions">
