@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MatStepperModule } from '@angular/material/stepper';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -45,11 +45,44 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 export class JobApplicationComponent {
   private fb: FormBuilder = inject(FormBuilder);
 
+  cities: string[] = [
+    'Bangalore',
+    'Hyderabad',
+    'Mumbai',
+    'Delhi',
+    'Chennai',
+    'Pune',
+    'Kolkata',
+    'Ahmedabad',
+    'Jaipur',
+    'Lucknow',
+    'New York',
+    'San Francisco',
+    'London',
+    'Dubai',
+    'Toronto'
+  ];
+
   personalInfoForm: FormGroup = this.fb.group({
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    email: ['', Validators.required],
-    phone: ['', Validators.required]
+    firstName: ['', [ 
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(50)
+    ]],
+    lastName: ['', [ 
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(50)
+    ]
+    ],
+    email: ['', 
+    [
+      Validators.required,
+      Validators.email
+    ]],
+    phone: ['', [
+      Validators.required,
+      Validators.pattern(/^\d{10}$/)]]
   });
 
   professionalDetailsForm: FormGroup = this.fb.group({
@@ -59,13 +92,15 @@ export class JobApplicationComponent {
   });
 
   jobPreferencesForm: FormGroup = this.fb.group({
-    preferredLocation: ['', Validators.required],
+    preferredLocation: ['', [
+      Validators.required,
+      JobApplicationComponent.cityInList(this.cities)]],
     availableStartDate: [null, Validators.required],
     interviewAvailability: this.fb.group({
       start: [null, Validators.required],
       end: [null, Validators.required]
     }),
-    employeeTypes: [[], [Validators.required, JobApplicationComponent.minOneSelected]],
+    employmentTypes: [[], [Validators.required, JobApplicationComponent.minOneSelected]],
     relocation: ['', Validators.required],
     emailNotifications: [false],
   });
@@ -91,6 +126,30 @@ export class JobApplicationComponent {
     };
   }
 
+  private static cityInList(cities: string[]): ValidatorFn
+  {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if(!control.value)
+        {
+        return null;
+        }
+        return cities.includes(control.value)? null : { cityNotInList: true};
+    }
+  }
+
+  markStepAsTouched(formGroup: FormGroup): void
+  {
+    Object.values(formGroup.controls).forEach(
+        (control: AbstractControl) => {
+          control.markAsTouched();
+
+          if (control instanceof FormGroup)
+          {
+            this.markStepAsTouched(control);
+          }
+        
+    });
+  }
   onEmploymentTypeChange(type: string, checked: boolean): void
   {
     const control: AbstractControl = this.jobPreferencesForm.get
@@ -142,23 +201,7 @@ export class JobApplicationComponent {
     }
   ];
 
-  cities: string[] = [
-    'Bangalore',
-    'Hyderabad',
-    'Mumbai',
-    'Delhi',
-    'Chennai',
-    'Pune',
-    'Kolkata',
-    'Ahmedabad',
-    'Jaipur',
-    'Lucknow',
-    'New York',
-    'San Francisco',
-    'London',
-    'Dubai',
-    'Toronto'
-  ];
+  
 
   filteredCities!: Observable<string[]>;
 

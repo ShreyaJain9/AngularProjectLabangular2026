@@ -17,6 +17,21 @@
                         <mat-icon>close</mat-icon>
                     </button>
                 }
+
+                @if (personalInfoForm.get('firstName')?.hasError('required'))
+                {
+                    <mat-error>First name is required</mat-error>
+                }
+
+                @if (personalInfoForm.get('firstName')?.hasError('minlength'))
+                {
+                    <mat-error>First name must be at least 2 characters.</mat-error>
+                }
+
+                @if (personalInfoForm.get('firstName')?.hasError('maxlength'))
+                {
+                    <mat-error>First name must be at least 50 characters.</mat-error>
+                }
             </mat-form-field>
 
             <mat-form-field class="form-field">
@@ -30,6 +45,20 @@
                         <mat-icon>close</mat-icon>
                     </button>
                 }
+                 @if (personalInfoForm.get('lastName')?.hasError('required'))
+                {
+                    <mat-error>Last name is required</mat-error>
+                }
+
+                @if (personalInfoForm.get('lastName')?.hasError('minlength'))
+                {
+                    <mat-error>Last name must be at least 2 characters.</mat-error>
+                }
+
+                @if (personalInfoForm.get('lastName')?.hasError('maxlength'))
+                {
+                    <mat-error>Last name must be at least 50 characters.</mat-error>
+                }
             </mat-form-field>
 
             <mat-form-field class="form-field">
@@ -42,6 +71,20 @@
                         (click)="clearField('email')">
                         <mat-icon>close</mat-icon>
                     </button>
+                }
+                 @if (personalInfoForm.get('email')?.hasError('required'))
+                {
+                    <mat-error>Email is required</mat-error>
+                }
+
+                @if (personalInfoForm.get('email')?.hasError('minlength'))
+                {
+                    <mat-error>Please enter a valid email address</mat-error>
+                }
+
+                @if (personalInfoForm.get('email')?.hasError('email'))
+                {
+                    <mat-error>Please enter a valid email address.</mat-error>
                 }
             </mat-form-field>
 
@@ -62,12 +105,23 @@
                 <mat-hint align="end">
                     {{ phoneInput.value.length }} / 10
                 </mat-hint>
+
+                 @if (personalInfoForm.get('phone')?.hasError('required'))
+                {
+                    <mat-error>Phone number is required</mat-error>
+                }
+
+                @if (personalInfoForm.get('phone')?.hasError('pattern'))
+                {
+                    <mat-error>Please enter exctly 10 digits.</mat-error>
+                }
+
             </mat-form-field>
 
         </form>
 
         <div class="step-actions">
-            <button mat-button matStepperNext>Next</button>
+            <button mat-button matStepperNext (click)="markStepAsTouched(personalInfoForm)">Next</button>
         </div>
 
     </mat-step>
@@ -87,6 +141,12 @@
                         <mat-option [value]="role">{{ role }}</mat-option>
                     }
                 </mat-select>
+                
+                @if (professionalDetailsForm.get('currentRole')?.hasError('required'))
+                {
+                    <mat-error>Please select your Current role</mat-error>
+                }
+
             </mat-form-field>
 
             <mat-form-field class="form-field">
@@ -98,6 +158,11 @@
                         <mat-option [value]="level">{{ level }}</mat-option>
                     }
                 </mat-select>
+
+                 @if (professionalDetailsForm.get('experience')?.hasError('required'))
+                {
+                    <mat-error>Please select your experience level</mat-error>
+                }
             </mat-form-field>
 
             <mat-form-field class="form-field">
@@ -115,13 +180,17 @@
                         </mat-optgroup>
                     }
                 </mat-select>
+                @if (professionalDetailsForm.get('skills')?.hasError('required'))
+                {
+                    <mat-error>Please select at least one skill</mat-error>
+                }
             </mat-form-field>
 
         </form>
 
         <div class="step-actions">
             <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+            <button mat-button matStepperNext (click)="markStepAsTouched(professionalDetailsForm)">Next</button>
         </div>
 
     </mat-step>
@@ -148,6 +217,11 @@
                         </mat-option>
                     }
                 </mat-autocomplete>
+
+                @if (jobPreferencesForm.get('preferredLocation')?.hasError('required'))
+                {
+                    <mat-error>Please select a city from the suggestions</mat-error>
+                }
             </mat-form-field>
 
 
@@ -165,6 +239,11 @@
                 </mat-datepicker-toggle>
 
                 <mat-datepicker #picker></mat-datepicker>
+
+                @if (jobPreferencesForm.get('availableStartDate')?.hasError ('required'))
+                {
+                    <mat-error>Please select a city from the suggestions</mat-error>
+                }
             </mat-form-field>
 
 
@@ -192,6 +271,27 @@
                 </mat-datepicker-toggle>
 
                 <mat-date-range-picker #rangePicker>
+
+
+                    @if (jobPreferencesForm.get('interviewAvailability.start')?.hasError('required')) 
+                    {
+                        <mat-error>Start date is required</mat-error>
+                    }
+
+                    @if (jobPreferencesForm.get('interviewAvailability.end')?.hasError('required')) 
+                    {
+                        <mat-error>End date is required</mat-error>
+                    }
+
+                    @if (jobPreferencesForm.get('interviewAvailability.start')?.hasError('matStartDateInvalid'))
+                    {
+                        <mat-error>Invalid start date</mat-error>
+                    }
+
+                     @if (jobPreferencesForm.get('interviewAvailability.end')?.hasError('matStartDateInvalid'))
+                    {
+                        <mat-error>Invalid end date</mat-error>
+                    }
                 </mat-date-range-picker>
 
             </mat-form-field>
@@ -207,6 +307,12 @@
                     </mat-checkbox>   
                     }
                 </div>
+
+                @if(jobPreferencesForm.get('employmentTypes')?.invalid &&
+                jobPreferencesForm.get('employmentTypes')?.touched)
+                {
+                    <div class="error-message">Please select at lest one Employment type</div>
+                }
             </div>
 
             <div class="field-section">
@@ -219,6 +325,12 @@
                         </mat-radio-button>
                     }
                 </mat-radio-group>
+
+                 @if(jobPreferencesForm.get('relocation')?.invalid &&
+                jobPreferencesForm.get('relocation')?.touched)
+                {
+                    <div class="error-message">Please select your relocation Preferences</div>
+                }
             </div>
 
             <div class="field-section">
@@ -230,7 +342,7 @@
 
         <div class="step-actions">
             <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+            <button mat-button matStepperNext (click)="markStepAsTouched(jobPreferencesForm)">Next</button>
         </div>
 
     </mat-step>
