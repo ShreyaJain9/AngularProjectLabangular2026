@@ -9,13 +9,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { MatDatepickerModule, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+
 
 @Component({
   imports: [
@@ -36,7 +39,9 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
     MatDateRangeInput,
     MatCheckboxModule,
     MatSlideToggleModule,
-    MatRadioModule
+    MatRadioModule,
+    MatCardModule,
+    MatDividerModule, DatePipe
   ],
   selector: 'app-job-application-component',
   styleUrl: './job-application-component.css',
@@ -106,7 +111,7 @@ export class JobApplicationComponent {
   });
 
   reviewForm: FormGroup = this.fb.group({
-    confirm: ['', Validators.required]
+    confirm: [false, Validators.requiredTrue]
   });
 
   today: Date = new Date();
@@ -219,5 +224,14 @@ export class JobApplicationComponent {
     return this.cities.filter(city =>
       city.toLowerCase().includes(filterValue)
     );
+  }
+
+  getRelocationLabel(value: string): string {
+  const option = this.relocationOptions.find(
+    (option: { value: string; label: string }) =>
+      option.value === value
+    );
+
+    return option?.label ?? '';
   }
 }

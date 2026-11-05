@@ -350,8 +350,133 @@
 
     <!-- Step 4: Review -->
     <mat-step label="Review" [stepControl]="reviewForm">
+        <div class="review-container">
+            <mat-card class="review-card">
+                <mat-card-header>
+                    <mat-card-title>Personal Information</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="review-row">
+                        <span class="review-label">First Name</span>
+                        <span>{{personalInfoForm.get('firstName')?.value}}</span>
+                    </div>
+                    <div class="review-row">
+                        <span class="review-label">Last Name</span>
+                        <span class="review-value">{{personalInfoForm.get('lastName')?.value}}</span>
+                    </div>
 
-        <p>Review your application before submitting.</p>
+                    <div class="review-row">
+                        <span class="review-label">Email</span>
+                        <span class="review-value">{{personalInfoForm.get('email')?.value}}</span>
+                    </div>
+
+                    <div class="review-row">
+                        <span class="review-label">Phone Number</span>
+                        <span class="review-value">{{personalInfoForm.get('phone')?.value}}</span>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-divider></mat-divider>
+
+            <mat-card class="review-card">
+                <mat-card-header>
+                    <mat-card-title>Professional Details</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="review-row">
+                        <span class="review-label">Current Role</span>
+                        <span class="review-value">{{professionalDetailsForm.get('currentRole')?.value}}</span>
+                    </div>
+                     <div class="review-row">
+                        <span class="review-label">Years of Experience</span>
+                        <span class="review-value">{{professionalDetailsForm.get('experience')?.value}}</span>
+                    </div>
+                     <div class="review-row">
+                        <span class="review-label">Technical Skills</span>
+                        <span class="review-value">{{jobPreferencesForm.get('skills')?.value}}</span>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+             <mat-card class="review-card">
+                <mat-card-header>
+                    <mat-card-title>Job Preferences</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="review-row">
+                        <span class="review-label">Preferred Location</span>
+                        <span class="review-value">{{jobPreferencesForm.get('preferredLocation')?.value}}</span>
+                    </div>
+                     <div class="review-row">
+                        <span class="review-label">Available Start Date</span>
+                        <span class="review-value">{{jobPreferencesForm.get('preferredLocation')?.value}}</span>
+                    </div>
+                     <div class="review-row">
+                        <span class="review-label">Available Start Date</span>
+                        <span class="review-value">{{jobPreferencesForm.get('availableStartDate')?.value | date: 'mediumDate'}}</span>
+                    </div>
+                     <div class="review-row">
+                        <span class="review-label">Interview Availability</span>
+                        <span class="review-value">{{jobPreferencesForm.get('interviewAvailability.start')?.value | date: 'mediumDate'}}</span>
+                        to
+                        {{jobPreferencesForm.get('interviewAvailability.end')?.value | date: 'mediumDatea'}}
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            
+             <mat-card class="review-card">
+                <mat-card-header>
+                    <mat-card-title>Job Preferences</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="review-row">
+                        <span class="review-label">Preferred Location</span>
+                        <span class="review-value">{{jobPreferencesForm.get('jobPreferencesForm')?.value}}</span>
+                    </div>
+
+                    <div class="review-row">
+                        <span class="review-label">Available Start Date</span>
+                        <span class="review-value">{{jobPreferencesForm.get('jobPreferencesForm')?.value | date: 'mediumDate'}}</span>
+                    </div>
+
+                    <div class="review-row">
+                        <span class="review-label">Interview Availability</span>
+                        <span class="review-value">
+                            {{jobPreferencesForm.get('interviewAvailability.start')?.value | 
+                            date: 'mediumDate'}}
+                            to
+                            {{jobPreferencesForm.get('interviewAvailability.end')?.value | 
+                            date: 'mediumDate'}}
+                            to 
+                            {{jobPreferencesForm.get('interviewAvailability.start')?.value | 
+                            date: 'mediumDate'}}
+                        </span>
+                    </div>
+                    <div class="review-row">
+                        <span class="review-label">Employment Types</span>
+                        <span class="review-value">
+                            {{jobPreferencesForm.get('employmentTypes')?.value}}
+                        </span>
+                    </div>
+
+                    <div class="review-row">
+                        <span class="review-label">Will to Relocate</span>
+                        <span class="review-value">
+                            {{getRelocationLabel(jobPreferencesForm.get('relocation')?.value)}}
+                        </span>
+                    </div>
+
+                    <div class="review-row">
+                        <span class="review-label">Email notifications</span>
+                        <span class="review-value">
+                            {{jobPreferencesForm.get('emailNotifications')?.
+                            value? 'Yes' : 'No'}}
+                        </span>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
 
         <div class="step-actions">
             <button mat-button matStepperPrevious>Back</button>
